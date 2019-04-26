@@ -21,6 +21,7 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+    using System.IO;
 
     /// <summary>
     /// Console writer.
@@ -43,11 +44,22 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
 
         /** Flag: whether to suppress stderr warnings from Java 11. */
         private readonly bool _suppressIllegalAccessWarnings;
+        private readonly StreamWriter _file;
 
         public ConsoleWriter()
         {
-            Console.WriteLine("ConsoleWriter Initialized.");
-            Console.WriteLine("CULTURE: " + CultureInfo.CurrentCulture.Name);
+            var binDir = Path.GetDirectoryName(GetType().Assembly.Location);
+            var file = Path.Combine(binDir, "dotnet-test.log");
+
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+
+            _file = File.AppendText(file);
+
+            _file.WriteLine("ConsoleWriter Initialized.");
+            _file.WriteLine("CULTURE: " + CultureInfo.CurrentCulture.Name);
 
             _suppressIllegalAccessWarnings =
                 Environment.GetEnvironmentVariable(EnvIgniteNetSuppressJavaIllegalAccessWarnings) == "true";
@@ -66,7 +78,10 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
                 message = string.Format("|ERR-{0}-{1}|: {2}", IsKnownWarning(message), _suppressIllegalAccessWarnings, message);
             }
 
-            Console.Out.Write(message);
+            lock (_file)
+            {
+                _file.Write(message);
+            }
         }
 
         /** <inheritdoc /> */
