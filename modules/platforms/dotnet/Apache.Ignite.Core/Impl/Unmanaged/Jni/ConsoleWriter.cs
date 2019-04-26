@@ -20,6 +20,7 @@ using System;
 namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
 {
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
 
     /// <summary>
     /// Console writer.
@@ -45,6 +46,9 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
 
         public ConsoleWriter()
         {
+            Console.WriteLine("ConsoleWriter Initialized.");
+            Console.WriteLine("CULTURE: " + CultureInfo.CurrentCulture.Name);
+
             _suppressIllegalAccessWarnings =
                 Environment.GetEnvironmentVariable(EnvIgniteNetSuppressJavaIllegalAccessWarnings) == "true";
         }
