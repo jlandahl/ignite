@@ -56,13 +56,13 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
             Justification = "Only instance methods can be called across AppDomain boundaries.")]
         public void Write(string message, bool isError)
         {
-            if (_suppressIllegalAccessWarnings && isError && IsKnownWarning(message))
+            // Testing hypothesis that StdErr is causing test run abortion.
+            if (isError)
             {
-                return;
+                message = "|ERR|: " + message;
             }
 
-            var target = isError ? Console.Error : Console.Out;
-            target.Write(message);
+            Console.Out.Write(message);
         }
 
         /** <inheritdoc /> */
