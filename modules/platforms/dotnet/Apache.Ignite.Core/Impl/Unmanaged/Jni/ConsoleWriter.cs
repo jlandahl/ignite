@@ -59,7 +59,7 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
             // Testing hypothesis that StdErr is causing test run abortion.
             if (isError)
             {
-                message = "|ERR|: " + message;
+                message = string.Format("|ERR-{0}-{1}|: {2}", IsKnownWarning(message), _suppressIllegalAccessWarnings, message);
             }
 
             Console.Out.Write(message);
