@@ -60,6 +60,7 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
 
             _file.WriteLine("ConsoleWriter Initialized.");
             _file.WriteLine("CULTURE: " + CultureInfo.CurrentCulture.Name);
+            _file.Flush();
 
             _suppressIllegalAccessWarnings =
                 Environment.GetEnvironmentVariable(EnvIgniteNetSuppressJavaIllegalAccessWarnings) == "true";
@@ -83,6 +84,7 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
             lock (_file)
             {
                 _file.Write(message);
+                _file.Flush();
             }
         }
 
