@@ -49,7 +49,7 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
         public ConsoleWriter()
         {
             var binDir = Path.GetDirectoryName(GetType().Assembly.Location);
-            var file = Path.Combine(binDir, "dotnet-test.log");
+            var file = Path.Combine(binDir, "dotnet-test-2.log");
 
             if (File.Exists(file))
             {
@@ -77,6 +77,8 @@ namespace Apache.Ignite.Core.Impl.Unmanaged.Jni
             {
                 message = string.Format("|ERR-{0}-{1}|: {2}", IsKnownWarning(message), _suppressIllegalAccessWarnings, message);
             }
+
+            Console.WriteLine(message);
 
             lock (_file)
             {
